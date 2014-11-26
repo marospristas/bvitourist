@@ -23,11 +23,11 @@ jQuery(document).ready(function($) {
         });
     }
     iniboxposition();
-$('.moveit').hover(function () {
-    $(this).addClass('hover');
-}, function () {
-    $(this).removeClass('hover');
-});
+    $('.moveit').hover(function() {
+        $(this).addClass('hover');
+    }, function() {
+        $(this).removeClass('hover');
+    });
 //    setInterval(function () {
 //        $('.track .box').each(function (index) {
 //            var elem = $('boxno' + index);
@@ -44,8 +44,8 @@ $('.moveit').hover(function () {
         $('.track').each(function() {
             var items = $(this).children('.box').length;
             $(this).children('.box').each(function(index) {
-                //console.log(index);
-                var elem = $('.boxno' + index);
+                //console.log('2'+this);
+                var elem = $(this);
                 var left1 = parseInt($(elem).css('left'));
                 //var items = $('.track').children('.box').length;
                 var length = (items) * 400;
@@ -57,16 +57,51 @@ $('.moveit').hover(function () {
                     left1 = left1 - length;
                 }
                 ;
-                if ($(this).parent('.slider').children('.left.hover').length > 0) {
+                //console.log($(this).closest('.slider').children('.left.hover'));
+                if ($(this).closest('.slider').children('.left.hover').length > 0) {
                     $(elem).css('left', left1 - 4);
                 }
-                else if ($(this).parent('.slider').children('.right.hover').length > 0) {
+                else if ($(this).closest('.slider').children('.right.hover').length > 0) {
                     $(elem).css('left', left1 + 4);
                 }
             });
         });
     }
-
+    function slidermagic() {
+        $(".slider").swipe({
+            swipeStatus: function(event, phase, direction, distance, duration, fingers) {
+                if (phase == "move" && (direction == "left" || direction == "right")) {
+                    var duration = 0;
+                    var items = $(this).find('.box').length;
+                    var length = (items) * 400;
+                    console.log("You swiped " + distance + "in" + direction);
+                    $(this).find(".box").each(function() {
+                        left1 = parseInt($(this).css('left'));
+                        if (left1 < -400) {
+                            left1 = left1 + length;
+                        }
+                        if (left1 > (length - 400)) {
+                            left1 = left1 - length;
+                        }
+                        if (direction === "right") {
+                             console.log(distance);
+                            $(this).css("left", left1 + distance);
+                        }
+                        ;
+                        if (direction === "left") {
+                            $(this).css("left", left1 - distance);
+                        }
+                        ;
+                    });
+                }
+                ;
+            },
+            threshold: 75,
+    triggerOnTouchEnd: true
+        });
+    }
+    ;
+    slidermagic();
     setInterval(function() {
         //console.log(index);
         reposition_boxes();

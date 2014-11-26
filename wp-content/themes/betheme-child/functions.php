@@ -1,5 +1,6 @@
 <?php
 wp_enqueue_script( 'mp_js', get_stylesheet_directory_uri().'/js/mp_js.js', array( 'jquery' ) );
+wp_enqueue_script( 'mobilescroll', get_stylesheet_directory_uri().'/js/mobilescroll.js', array( 'jquery' ) );
 add_action('wp_enqueue_scripts', 'prefix_enqueue_awesome');
 
 function prefix_enqueue_awesome() {
